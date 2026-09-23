@@ -1,0 +1,41 @@
+package com.aegis.presentation;
+import com.aegis.domain.CurrencyPair;
+import com.aegis.domain.Trade;
+import com.aegis.presentation.dto.TradeRequestDto;
+import com.aegis.presentation.dto.TradeResponseDto;
+import com.aegis.service.ReconciliationEngine;
+import jakarta.validation.Valid;
+import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/trades")
+public class TradeController {
+    private static final Logger log = LoggerFactory.getLogger(TradeController.class);
+    private final ReconciliationEngine engine;
+
+    public TradeController(ReconciliationEngine engine) {
+        this.engine = engine;
+    }
+
+    @PostMapping
+    public ResponseEntity<TradeResponseDto> submitTrade(@Valid @RequestBody TradeRequestDto request) {
+        log.info("Received Trade Request [{}] on thread: {}", request.externalReference(), Thread.currentThread());
+        UUID tradeId = UUID.randomUUID();
+        CurrencyPair pair = new CurrencyPair(request.baseCurrency(), request.quoteCurrency());
+        Trade trade = new Trade(tradeId, request.externalReference(), pair, request.amount());
+        
+        engine.submitTrade(trade);
+        engine.processTrade(trade);
+        
+        TradeResponseDto response = new TradeResponseDto(tradeId, trade.getStatus().name(), "Trade processed successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+}

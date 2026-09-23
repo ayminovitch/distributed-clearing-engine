@@ -29,6 +29,9 @@ public class Trade {
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
+    @Version
+    private int version = 0;
+
     protected Trade () {}
 
     public Trade (UUID id, String exrernalReference, CurrencyPair currencyPair, BigDecimal amount) {
@@ -62,4 +65,5 @@ public class Trade {
     public BigDecimal getAmount() {return amount;}
     public TradeStatus getStatus() {return status;}
     public Instant getCreatedAt() {return createdAt;}
+    public int getVersion() { return version; }
 }

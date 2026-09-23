@@ -1,6 +1,9 @@
 spring:
   application:
     name: aegis-engine
+  threads:
+    virtual:
+      enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/aegis_db
     username: aegis_user
