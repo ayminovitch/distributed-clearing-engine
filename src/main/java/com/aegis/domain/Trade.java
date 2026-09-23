@@ -1,16 +1,35 @@
 package com.aegis.domain;
 
+import jakarta.persistence.*;
+import org.springframework.beans.propertyeditors.CurrencyEditor;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
+@Entity
+@Table(name = "trades")
 public class Trade {
-    private final UUID id;
-    private final String exrernalReference;
-    private final CurrencyPair currencyPair;
-    private final BigDecimal amount;
+    @Id
+    private UUID id;
+
+    @Column(nullable = false, unique = true)
+    private String exrernalReference;
+
+    @Column(nullable = false, length = 7)
+    private CurrencyPair currencyPair;
+
+    @Column(nullable = false, precision = 19, scale = 4)
+    private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TradeStatus status;
-    private final Instant createdAt;
+
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
+
+    protected Trade () {}
 
     public Trade (UUID id, String exrernalReference, CurrencyPair currencyPair, BigDecimal amount) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
