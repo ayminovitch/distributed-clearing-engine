@@ -14,7 +14,7 @@ public class Trade {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    private String exrernalReference;
+    private String externalReference;
 
     @Column(nullable = false, length = 7)
     private CurrencyPair currencyPair;
@@ -37,7 +37,7 @@ public class Trade {
         }
 
         this.id = id;
-        this.exrernalReference = exrernalReference;
+        this.externalReference = exrernalReference;
         this.currencyPair = currencyPair;
         this.amount = amount;
         this.status = TradeStatus.PENDING;
@@ -57,7 +57,7 @@ public class Trade {
     }
 
     public UUID getId() {return id;}
-    public String getExrernalReference() {return exrernalReference;}
+    public String getExrernalReference() {return externalReference;}
     public CurrencyPair getCurrencyPair() {return currencyPair;}
     public BigDecimal getAmount() {return amount;}
     public TradeStatus getStatus() {return status;}
