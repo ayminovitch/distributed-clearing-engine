@@ -65,5 +65,6 @@ public class Trade {
     public BigDecimal getAmount() {return amount;}
     public TradeStatus getStatus() {return status;}
     public Instant getCreatedAt() {return createdAt;}
-    public int getVersion() { return version; }
+    public int getVersion() { return version;
+}
 }
