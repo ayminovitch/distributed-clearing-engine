@@ -60,7 +60,7 @@ public class Trade {
     }
 
     public UUID getId() {return id;}
-    public String getExrernalReference() {return externalReference;}
+    public String getExternalReference() {return externalReference;}
     public CurrencyPair getCurrencyPair() {return currencyPair;}
     public BigDecimal getAmount() {return amount;}
     public TradeStatus getStatus() {return status;}

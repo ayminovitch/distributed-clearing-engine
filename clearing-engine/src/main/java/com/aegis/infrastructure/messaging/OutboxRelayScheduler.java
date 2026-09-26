@@ -3,6 +3,8 @@ package com.aegis.infrastructure.messaging;
 import com.aegis.domain.OutboxEvent;
 import com.aegis.infrastructure.persistence.OutboxEventRepository;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,11 +35,14 @@ public class OutboxRelayScheduler {
         }
 
         for (OutboxEvent event : pendingEvents) {
-            kafkaTemplate.send(TOPIC, event.getAggregateId(), event.getPayload());
-            event.markAsProcessed();
-            outboxEventRepository.save(event);
-
-            log.info("Event with ID {} has been relayed to Kafka topic {}", event.getId(), TOPIC);
+            try {
+                kafkaTemplate.send(TOPIC, event.getAggregateId(), event.getPayload()).get(5, TimeUnit.SECONDS);
+                event.markAsProcessed();
+                log.info("Event with ID {} has been relayed to Kafka topic {}", event.getId(), TOPIC);
+            }catch (Exception e) {
+                log.error("CRITICAL: Failed to relay event {} to Kafka. Transaction rolling back.", event.getId(), e);
+                throw new RuntimeException("Kafka relay failed", e);
+            }
         }
     }
 }

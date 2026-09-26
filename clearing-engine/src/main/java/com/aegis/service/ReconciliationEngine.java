@@ -34,7 +34,7 @@ public class ReconciliationEngine {
 
     @Transactional
     public void processTrade(Trade trade) {
-        log.info("Start reconciliation for Trade ID: {} [{}]", trade.getId(), trade.getExrernalReference());
+        log.info("Start reconciliation for Trade ID: {} [{}]", trade.getId(), trade.getExternalReference());
 
         try {
             trade.markAsValidated();
