@@ -48,3 +48,13 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  level:
+    root: INFO
+    org.apache.kafka: WARN
+    org.springframework.kafka: WARN
+    org.hibernate: WARN
+    com.zaxxer.hikari: WARN
+    org.flywaydb: WARN
+    com.aegis: WARN

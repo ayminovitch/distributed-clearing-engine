@@ -1,0 +1,16 @@
+dependencies {
+    // Core Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+
+    // Messaging & Caching
+    implementation 'org.springframework.boot:spring-boot-starter-kafka'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Observability
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

@@ -1,1 +1,3 @@
 rootProject.name = 'aegis'
+include 'clearing-engine'
+include 'ledger-service'
