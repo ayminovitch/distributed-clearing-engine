@@ -37,6 +37,29 @@ services:
     volumes:
       - aegis-kafka-data:/var/lib/kafka/data
 
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: aegis-zipkin
+    ports:
+      - "9411:9411"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: aegis-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: aegis-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
 volumes:
   aegis-postgres-data:
   aegis-redis-data:

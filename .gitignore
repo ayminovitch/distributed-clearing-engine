@@ -9,3 +9,8 @@ build/
 *.ipr
 out/
 .DS_Store
+
+# VSCode and IDE output directories
+.vscode/
+bin/
+**/bin/
