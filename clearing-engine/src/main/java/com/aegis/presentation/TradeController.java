@@ -4,6 +4,7 @@ import com.aegis.domain.Trade;
 import com.aegis.presentation.dto.TradeRequestDto;
 import com.aegis.presentation.dto.TradeResponseDto;
 import com.aegis.service.ReconciliationEngine;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,8 +40,10 @@ public class TradeController {
             content = @Content(schema = @Schema(implementation =  TradeResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Invalid payload (RFC 7807 Problem Detail)",
             content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "429", description = "Too Many Requests - Rate limit exceeded")
     })
     @PostMapping
+    @RateLimiter(name = "tradeApi")
     public ResponseEntity<TradeResponseDto> submitTrade(@Valid @RequestBody TradeRequestDto request) {
         log.info("Received Trade Request [{}] on thread: {}", request.externalReference(), Thread.currentThread());
         UUID tradeId = UUID.randomUUID();

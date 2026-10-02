@@ -1,5 +1,6 @@
 package com.aegis.presentation.exception;
 
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +37,16 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
         problemDetail.setType(URI.create("https://api.aegis.com/errors/business-rule-violation"));
         problemDetail.setTitle("Business Rule Violation");
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(RequestNotPermitted.class)
+    public ProblemDetail handleRateLimitExceeded(RequestNotPermitted ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, "You have exceeded your API rate limit. Please try again later.");
+        problemDetail.setType(URI.create("https://api.aegis.com/errors/rate-limit-exceeded"));
+        problemDetail.setTitle("Too Many Requests");
         problemDetail.setProperty("timestamp", Instant.now());
 
         return problemDetail;

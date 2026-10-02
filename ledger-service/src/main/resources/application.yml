@@ -39,3 +39,12 @@ logging:
     org.springframework.kafka: WARN
     com.aegis: WARN
     org.apache.kafka: WARN
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      redisCache:
+        slidingWindowSize: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15s
+        permittedNumberOfCallsInHalfOpenState: 2
